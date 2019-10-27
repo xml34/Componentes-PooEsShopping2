@@ -1,0 +1,23 @@
+delta dListarCategorias {
+	modifies org.pl.eshopping.fop.AdminCategoria{
+			adds public void listar() {
+			Categoria c = new Categoria();
+			catDAO.listar(c);
+		}
+	}
+	modifies org.pl.eshopping.dto.CategoriaDAO{
+		adds public void listar(Categoria c){
+			try {
+				conn = Conexion.getConexion();
+				String query = "SELECT * FROM categoria";
+				ps = conn.prepareStatement(query);
+				ps.setString(1, c.getId().toString());
+				ps.executeUpdate();
+			}
+			catch(Exception e){ e.printStackTrace(); }
+			finally{
+				try { conn.close(); } catch (Exception e) { /* ignored */ }
+			}
+		}
+	}
+}
